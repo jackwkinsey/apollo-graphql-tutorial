@@ -1,20 +1,22 @@
 const { gql } = require('apollo-server');
 
 const typeDefs = gql`
-  type Mission {
-    name: String
-    missionPatch(size: PatchSize): String
+  type Query {
+    launches: [Launch]!
+    launch(id: ID!): Launch
+    me: User
   }
 
-  enum PatchSize {
-    SMALL
-    LARGE
+  type Mutation {
+    bookTrips(launchIds: [ID]!): TripUpdateResponse!
+    canceTrip(launchId: ID!): TripUpdateResponse!
+    login(email: String): String # login token
   }
 
-  type Rocket {
-    id: ID!
-    name: String
-    type: String
+  type TripUpdateResponse {
+    success: Boolean!
+    message: String
+    launches: [Launch]
   }
 
   type Launch {
@@ -31,22 +33,20 @@ const typeDefs = gql`
     trips: [Launch]!
   }
 
-  type TripUpdateResponse {
-    success: Boolean!
-    message: String
-    launches: [Launch]
+  type Mission {
+    name: String
+    missionPatch(size: PatchSize): String
   }
 
-  type Query {
-    launches: [Launch]!
-    launch(id: ID!): Launch
-    me: User
+  enum PatchSize {
+    SMALL
+    LARGE
   }
 
-  type Mutation {
-    bookTrips(launchIds: [ID]!): TripUpdateResponse!
-    canceTrip(launchId: ID!): TripUpdateResponse!
-    login(email: String): String # login token
+  type Rocket {
+    id: ID!
+    name: String
+    type: String
   }
 `;
 
